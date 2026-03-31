@@ -190,5 +190,68 @@ promiseRace.then((res) => {
 
 // promise2 reject, however promise1 resolve's before promise2
 // hence, promise1 fullfied and retured
+```
 
+### Promise.allSettled()
+
+- This method returns a promise that resolves after all of the given promises either resolved or rejected
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+    setTimeout(()=> {
+        resolve("promise1 success!")
+    }, 1000)
+});
+
+const promise2 = new Promise((resolve, reject) => {
+    setTimeout(()=> {
+        reject("promise2 reject!")
+    }, 2000)
+});
+
+const promiseAllSettled = Promise.allSettled([promise1, promise2]);
+
+promiseAllSettled.then((res) => {
+    console.log(res)
+}).catch(err => {
+    console.log(err)
+}).finally(() => {
+    console.log("Completed!")
+});
+
+// Output: [
+//  { status: 'fulfilled', value: 'promise1 success!' },
+//  { status: 'rejected', reason: 'promise2 reject!' }
+// ]
+// Completed!
+```
+
+### Promise.any()
+- This taked iterable promise objects and as soon as one of the promises in the iterable fulfills, return a single promise that resolves with the value from that promise.
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+    setTimeout(()=> {
+        resolve("promise1 success!")
+    }, 1000)
+});
+
+const promise2 = new Promise((resolve, reject) => {
+    setTimeout(()=> {
+        reject("promise2 reject!")
+    }, 2000)
+});
+
+const promiseAny = Promise.any([promise1, promise2]);
+
+promiseAny.then((res) => {
+    console.log(res)
+}).catch(err => {
+    console.log(err)
+}).finally(() => {
+    console.log("Completed!")
+})
+
+// Output: promise1 success!
+// Completed!
 ```
