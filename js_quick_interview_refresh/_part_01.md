@@ -255,3 +255,111 @@ promiseAny.then((res) => {
 // Output: promise1 success!
 // Completed!
 ```
+
+# async/await
+- async/await built on top of Promises and event loop that allows developers to write asynchronous code in a sequential, synchronous looking style, improve readability and maintanability 
+- `async` keyword is used to declare an asynchronous function 
+-  An `async` function always return Promise 
+
+```js
+async function getData() {
+  return "Hello, World!"; 
+}
+
+// Calling getData() returns a Promise
+getData().then(value => console.log(value)); // Output: Hello, World!
+```
+
+- The `await` keyword can only be used inside `async` function 
+- It pauses the `async` function execution until the Promise it's waiting for is settled(either resolved or rejected)
+
+```js
+async function fetchUserData() {
+  try {
+    const response = await fetch('https://example.com'); // Pause until fetch resolves
+    const data = await response.json(); // Pause until data is parsed
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error); // Handle any errors
+  }
+}
+fetchUserData();
+```
+
+#### Advanced Usage and Best Practices
+
+- **Error Handling:** Use standard `try...catch` blocks for robust error handling, which is often more intuitive than `.catch()` chaining with Promises.
+- **Parallel Execution:** For independent operations, do not use multiple await statements sequentially in a loop, as this runs them one after another (sequentially). Instead, use `Promise.all()` to run them concurrently, then `await` the result of `Promise.all()`.
+
+```js
+// Sequential (slower if independent)
+for (const item of items) {
+  await processItem(item); 
+}
+
+// Parallel (faster)
+const promises = items.map(item => processItem(item));
+await Promise.all(promises); 
+```
+
+- **Top-Level Await:** In modern ES modules, you can use `await` outside of an async function, simplifying initial asynchronous setups like loading configuration.
+- **Performance Considerations:** Avoid CPU-intensive synchronous tasks within `async` functions that block the event loop, as this can still freeze the user interface. For heavy computation, consider using Web Workers. 
+
+# Prototype inheritance 
+
+- A prototype simply another object that acts as a template, providing shared properties and methods to other object.
+- Every object has internal hidden property **[[Prototype]]**, which can be accessed using `Object.getPrototypeOf()` or `__proto__`
+- Object look property, it will look another object until it finds or "null", called Prototype Chain. 
+
+Other ways,
+
+Constructor function 
+```js
+function Animal(name) {
+  this.name = name;
+}
+Animal.prototype.eat = function() { // Method stored on the prototype
+  console.log(`${this.name} is eating.`);
+};
+
+const animal1 = new Animal('Dog');
+animal1.eat(); // Dog is eating.
+```
+
+Object.create()
+```js
+const animal = {
+  eat() {
+    console.log(`${this.name} is eating.`);
+  }
+};
+const dog = Object.create(animal);
+dog.name = 'Rex';
+dog.eat(); // Rex is eating.
+```
+
+ES6 Classes (Syntactic Sugar)
+```js
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  eat() {
+    console.log(`${this.name} is eating.`);
+  }
+}
+
+class Dog extends Animal {
+  constructor(name) {
+    super(name); // Calls the parent constructor
+  }
+  bark() {
+    console.log(`${this.name} barks!`);
+  }
+}
+
+const dog1 = new Dog('Buddy');
+dog1.eat(); // Buddy is eating.
+dog1.bark(); // Buddy barks!
+```
+
