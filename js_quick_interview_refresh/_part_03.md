@@ -183,3 +183,149 @@ console.log(gen.next()); // { value: "Third Value", done: false }
 console.log(gen.next()); // { value: undefined, done: true }
 ```
 
+# scope, scope chain
+
+- scope : visibility or accessibility of variables and functions in different part of your code 
+- scope chain : highrarchical process js uses to find variables. 
+- inner -> outer -> global scope   
+
+```js
+const globalVar = "I am Global"; // Global Scope
+
+function outerFunction() {
+    const outerVar = "I am Outer"; // Function Scope (outer)
+
+    function innerFunction() {
+        const innerVar = "I am Inner"; // Function Scope (inner)
+
+        // The Scope Chain allows access to variables in parent scopes
+        console.log(innerVar);  // Found in current scope
+        console.log(outerVar);  // Found in outerFunction's scope
+        console.log(globalVar); // Found in Global scope
+    }
+
+    innerFunction();
+}
+
+outerFunction();
+```
+
+# null, undefined 
+
+#### null 
+- intentional absence of value 
+- set by developer 
+- typeof `object` (historical bug)
+- convert to 0 (on Numeric context)
+- Paresed in JSON stringify
+
+#### undefined 
+- Uninitialized/missing value 
+- set by js engine
+- typeof 'undefined'
+- convert to NaN (on Numeric context)
+- omitter/undefined in stringify 
+
+# WeakMap, WeakSet
+
+- map : if use object as a key in map, that object exist utill map live. It occupies memory, can not garbage collected(GC)
+- weakMap : unlike map, it will not hold reference to the object after it no logner live. It will remove from memory automatically 
+- map is iterable (has `.entries()`, `.values()`, `.keys()`, `.size`), whereas weakMap doest not as the GC will remove collection at any time.
+
+#### map
+```js
+let john = { name: "John" };
+let map = new Map();
+map.set(john, "...");
+john = null; // overwrite the reference
+
+// john is stored inside the map,
+// we can get it by using map.keys()
+
+console.log(map.keys()); // [Map Iterator] { { name: 'John' } }
+```
+
+#### weakmap
+
+```js
+let john = { name: "John" };
+let weakMap = new WeakMap();
+weakMap.set(john, "...");
+john = null; // overwrite the reference
+
+// john is removed from memory!
+
+console.log(weakMap.get(john)); // undefined
+```
+
+- set : can collect any value 
+- weakSet : collects objects only 
+- object in weakmap can be GC if there is no other reference to it.
+
+#### set 
+```js
+let myWeakSet = new WeakSet();
+let obj = {};
+myWeakSet.add(obj); 
+console.log(myWeakSet.has(obj));
+
+// break the last reference to the object we created earlier
+obj = 5;
+
+// false because no other references to the object which the weakset points to
+// because weakset was the only object holding a reference it released it and got garbage collected
+console.log(myWeakSet.has(obj)); 
+```
+
+# Object.freeze()
+- static method makes an Object immutable 
+- shallow freeze
+
+```js
+const user = { name: "Alice", age: 25 };
+Object.freeze(user);
+
+user.age = 30; // Fails (throws TypeError in strict mode)
+user.location = "NY"; // Fails
+delete user.name; // Fails
+
+console.log(Object.isFrozen(user)); // true
+
+console.log(user); // Output: { name: "Alice", age: 25 }
+                     
+```
+
+| Feature | 	Object.freeze() |	Object.seal() |	Object.preventExtensions()  |
+|--------|--------|-------|-------|
+| Add New Properties  |	No  |	No  |	No  |
+| Delete Properties | 	No  |	No  |	Yes |
+| Modify Values | 	No  |	Yes |	Yes |
+
+#### Deep Freezing
+```js
+function deepFreeze(object) {
+  Object.keys(object).forEach(name => {
+    let prop = object[name];
+    if (typeof prop === 'object' && prop !== null) {
+      deepFreeze(prop);
+    }
+  });
+  return Object.freeze(object);
+}
+```
+
+# Object methods
+
+```js
+let user = {
+    name: "john",
+    place: "xyz"
+}
+
+console.log(Object.keys(user)); // [ 'name', 'place' ]
+
+console.log(Object.values(user)); // [ 'john', 'xyz' ]
+
+console.log(Object.entries(user)); // [ [ 'name', 'john' ], [ 'place', 'xyz' ] ]
+```
+
