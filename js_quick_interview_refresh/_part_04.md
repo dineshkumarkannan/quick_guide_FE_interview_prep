@@ -176,12 +176,66 @@ fetchData('https://jsonplaceholder.typicode.com/posts/1');
   - 503 Service Unavailable
   - 504 Gateway Timeout
 
-- **2xx** : Success Error Codes
+- **2xx**, **3xx** : Success Error Codes
   - 200 Ok. Standard Success
   - 201 Created
   - 204 No Content 
-
   - 301 Moved Permanently : The requested resourse has permanently moved to a new URL
   - 304 Not Modified : Indicates the catched version of the resource is still valid
   
-   
+# array.slice(), array.splice()
+
+### array.slice()
+- creates a shallow copy without modifying original data 
+
+```js
+const arr1 = [ 1, 2, 3];
+const copiedArr = arr1.slice();
+copiedArr.push(4);
+arr1.push(10);
+console.log(arr1);
+console.log(copiedArr);
+```
+
+### array.splice()
+- modifies the original array. adding, removing, or replacing elements
+
+```js
+const arr1 = [ 1, 2, 3, 4, 5];
+
+arr1.splice(1, 1); // removed arr1[1] position one element from original array
+
+console.log(arr1); // [ 1, 3, 4, 5 ]
+
+arr1.splice(2, 0, 555); // added new element to 2nd position 
+
+console.log(arr1); // [ 1, 3, 555, 4, 5 ]
+
+arr1.splice(2, 1, 666); // replaced position 1 element value with new value 
+
+console.log(arr1); // [ 1, 3, 666, 4, 5 ]
+```
+
+# tagged templates 
+- an advanced form of js template literals, that allow you to parse or manipulate string literals using custom functions known as tag.
+
+```js
+function highlight(strings, ...values) {
+  return strings.reduce((prev, curr, i) => {
+    return `${prev}${curr}${values[i] ? `<span class="hl">${values[i]}</span>` : ''}`;
+  }, '');
+}
+
+const name = 'Alice';
+const role = 'Developer';
+const sentence = highlight`${name} is a ${role}.`;
+// Result: "<span class="hl">Alice</span> is a <span class="hl">Developer</span>."
+
+```
+
+# event bubbling, event capturing 
+
+- two phases of javascript event propagation 
+- **bubbling**(default) : propagate events from the target element upward through parents
+- **capturing** : moves from the root down to the target
+- stop an event from propagation in ether phase using the `event.stopPropagation()`

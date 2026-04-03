@@ -20,6 +20,16 @@ console.log('End');
 
 ```
 
+- **Microtasks** - `Promise.then/catch/finally`, `async/await`, `MutationObserver`, `queueMicrotask()`
+- **Macrotasks** - `setTimeout`, `setInterval`, `setImmediate`, I/O operations, UI rendering, and the initial script itself
+
+### Execution order
+1. Synchronous Code 
+2. Microtasks
+3. Rendering(in browsers) UI updates may occur after microtaks queue is cleared
+4. Macrotasks
+
+
 # map(), filter(), reduce(), forEach()
 
 map()

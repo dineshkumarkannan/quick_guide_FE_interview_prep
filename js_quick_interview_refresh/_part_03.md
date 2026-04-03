@@ -329,3 +329,15 @@ console.log(Object.values(user)); // [ 'john', 'xyz' ]
 console.log(Object.entries(user)); // [ [ 'name', 'john' ], [ 'place', 'xyz' ] ]
 ```
 
+# detect different ways of object is an array
+
+```js
+let arr = [];
+
+console.log(Array.isArray(arr)); // best practice for production code
+
+console.log(Object.prototype.toString.call(arr) === '[object Array]'); // Older way 
+
+console.log(arr instanceof Array); // return true, but it failes accross different windows or frames 
+```
+
