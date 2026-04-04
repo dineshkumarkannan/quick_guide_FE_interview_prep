@@ -239,3 +239,52 @@ const sentence = highlight`${name} is a ${role}.`;
 - **bubbling**(default) : propagate events from the target element upward through parents
 - **capturing** : moves from the root down to the target
 - stop an event from propagation in ether phase using the `event.stopPropagation()`
+
+# ES5, ES6
+
+| Feature | 	ES5 (Old) |	ES6 (Modern/ES2015) |
+|-------|------|-----|
+**Variable Declaration**  |	var (function scope)  |	let, const (block scope)
+**Functions** |	function()  | keyword	Arrow functions () => {}
+**String Handling** |	Concatenation (+) |	Template Literals (`)
+**Modules** |	require / exports |	import / export
+**Object Oriented** |	Prototypes |	Classes (class, constructor)
+**Asynchronous** |	Callbacks	| Promises, Async/Await
+**Parameters** |	arguments object |	Default, Rest, Spread operators
+
+# Function.prototype
+- used to implement prototypical inheritance, allowing all the instances create with the constructor function to share the same methods and properties without duplicating them in memory 
+
+```js
+// 1. Define a constructor function
+function Person(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+}
+
+// 2. Add a method to the prototype
+// This method is now shared by ALL Person instances
+Person.prototype.getFullName = function() {
+    return `${this.firstName} ${this.lastName}`;
+};
+
+// 3. Create instances
+const user1 = new Person("Jane", "Doe");
+const user2 = new Person("John", "Smith");
+
+// 4. Access the shared method
+console.log(user1.getFullName()); // Output: Jane Doe
+console.log(user2.getFullName()); // Output: John Smith
+
+// 5. Verification
+console.log(user1.getFullName === user2.getFullName); // true (they share the same function reference)
+```
+
+```js
+Array.prototype.last = function() {
+    return this[this.length - 1];
+};
+const nums = [1, 2, 3];
+console.log(nums.last()); // 3
+```
+
